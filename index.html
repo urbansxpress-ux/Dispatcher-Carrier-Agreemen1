@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dispatcher-Carrier Agreement</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f6f7fb; margin:0; padding:20px; }
+    .container { max-width:800px; margin:20px auto; background:#fff; padding:40px; border-radius:6px; box-shadow:0 3px 10px rgba(0,0,0,0.08);}
+    h1 { text-align:center; font-size:20px; margin:0 0 10px; text-transform:uppercase; }
+    .agreement { line-height:1.4; font-size:14px; }
+    .agreement strong { display:inline-block; margin-top:6px; }
+    label { font-weight:600; margin:8px 0 4px; display:block; font-size:14px; }
+    input[type="text"], input[type="date"] { width:100%; padding:6px 8px; border:1px solid #ccc; border-radius:4px; font-size:14px; }
+    button { background:#0b79ff; color:#fff; border:0; padding:8px 14px; border-radius:6px; font-weight:600; cursor:pointer; margin-top:12px; font-size:14px; }
+  </style>
+</head>
+<body>
+  <div class="container" id="agreementContent">
+    <h1>DISPATCHER–CARRIER AGREEMENT</h1>
+
+    <div class="agreement">
+      This Agreement is made and entered into as of the date signed below, by and between:<br><br>
+      <strong>Dispatcher:</strong> John William<br>
+      <strong>Carrier:</strong> <span id="carrierNameFill">__________</span><br>
+      <strong>Date:</strong> <span id="carrierDateFill">__________</span><br><br>
+
+      <strong>1. Purpose</strong><br>
+      The purpose of this Agreement is to set forth the terms under which the Dispatcher will provide load-finding and dispatch services for the Carrier.<br><br>
+
+      <strong>2. Services Provided</strong><br>
+      <em>The Dispatcher agrees to:</em><br>
+      • Locate and secure freight loads for the Carrier.<br>
+      • Communicate with freight brokers, shippers, and other parties on behalf of the Carrier.<br>
+      • Provide all necessary load information to the Carrier before dispatch.<br>
+      <em>The Carrier agrees to:</em><br>
+      • Operate under their own motor carrier authority (MC#/DOT#).<br>
+      • Provide accurate and up-to-date truck availability.<br>
+      • Maintain all required insurance, permits, and licenses.<br><br>
+
+      <strong>3. Payment Terms</strong><br>
+      • The Carrier agrees to pay the Dispatcher <strong>8% of the gross load rate</strong> for each load booked through the Dispatcher.<br>
+      • Payment shall be due within 48 hours of the Carrier receiving payment from the broker/shipper.<br>
+      • Payments will be made via (CashApp / Zelle / PayPal).<br><br>
+
+      <strong>4. Term & Termination</strong><br>
+      • This Agreement shall remain in effect month-to-month unless terminated by either party with 7 days’ written notice.<br>
+      • Either party may terminate immediately for breach of contract.<br><br>
+
+      <strong>5. Non-Solicitation</strong><br>
+      The Carrier shall not bypass the Dispatcher to work directly with brokers, shippers, or customers introduced by the Dispatcher, for a period of 6 months after termination of this Agreement.<br><br>
+
+      <strong>6. Liability</strong><br>
+      The Dispatcher is not responsible for damage, loss, delays, or cargo claims.<br>
+      The Carrier assumes full responsibility for the safe and legal operation of their vehicles.<br><br>
+
+      <strong>7. Governing Law</strong><br>
+      This Agreement shall be governed by and construed in accordance with the laws of the State of [Insert State].<br><br>
+
+      <strong>IN WITNESS WHEREOF</strong>, the parties have executed this Agreement as of the date signed below:<br><br>
+
+      <strong>Dispatcher:</strong><br>
+      Name: John William<br>
+    </div>
+
+    <!-- Editable Inputs -->
+    <hr style="margin:16px 0;">
+    <label for="carrierName">Carrier Name</label>
+    <input id="carrierName" type="text" placeholder="Enter carrier name">
+
+    <label for="date">Carrier Date</label>
+    <input id="date" type="date">
+
+    <button id="downloadBtn">Download PDF</button>
+  </div>
+
+  <!-- html2pdf library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+  <script>
+    const carrierNameInput = document.getElementById('carrierName');
+    const dateInput = document.getElementById('date');
+
+    // update name
+    carrierNameInput.addEventListener('input', () => {
+      document.getElementById('carrierNameFill').innerText = carrierNameInput.value || "__________";
+    });
+
+    // update date
+    dateInput.addEventListener('input', () => {
+      document.getElementById('carrierDateFill').innerText = dateInput.value || "__________";
+    });
+
+    // Download PDF
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      const opt = {
+        margin: 12,
+        filename: (carrierNameInput.value || "Carrier") + "_Agreement.pdf",
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(document.getElementById('agreementContent')).save();
+    });
+
+    // Default date = today
+    (function setToday(){
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth()+1).padStart(2,'0');
+      const dd = String(today.getDate()).padStart(2,'0');
+      dateInput.value = yyyy+"-"+mm+"-"+dd;
+      document.getElementById('carrierDateFill').innerText = dateInput.value;
+    })();
+  </script>
+</body>
+</html>
